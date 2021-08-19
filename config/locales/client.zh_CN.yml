@@ -1,0 +1,12 @@
+zh_CN:
+  js:
+    group_invitation:
+      invite_user_into_group: "邀请选择的用户加入群组"
+      invite_user: "邀请用户"
+      invitee: "被邀请者"
+      inviter: "邀请者"
+      apply_reason: "邀请理由"
+      created_at: "邀请时间"
+      withdraw_invitation: "撤回邀请"
+      admin:
+        allow_invite_member: "允许邀请用户"

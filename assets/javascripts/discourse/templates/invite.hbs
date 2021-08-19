@@ -1,0 +1,50 @@
+<form class="form-vertical">
+  {{email-group-user-chooser
+    class="input-xxlarge"
+    id="member-selector"
+    value=inviteeUsername
+    onChange=(action "updateUsername")
+    options=(hash
+      filterPlaceholder="groups.selector_placeholder"
+      maximum=1
+    )
+  }}
+  {{d-button class="btn-default" label="group_invitation.invite_user_into_group" action=(action "submit")}}
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>{{i18n "group_invitation.inviter"}}</th>
+      <th>{{i18n "group_invitation.invitee"}}</th>
+      <th>{{i18n "group_invitation.created_at"}}</th>
+      {{#if reasonRequired }}
+        <th>{{i18n "group_invitation.apply_reason"}}</th>
+      {{/if}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each model.invitations as |invitation|}}
+      <tr>
+        <td class="avatar">
+          {{user-info user=invitation.inviter skipName=skipName}}
+        </td>
+        <td class="text">
+          {{user-info user=invitation.invitee skipName=skipName}}
+        </td>
+        <td>
+          <span class="text">{{bound-date invitation.created_at}}</span>
+        </td>
+        {{#if model.reasonRequired }}
+          <td>
+            {{invitation.apply_reason}}
+          </td>
+        {{/if}}
+        <!-- Buttons -->
+        <td>
+          {{d-button class="btn-default" label="group_invitation.withdraw_invitation" action=(action "withdrawInvitation") actionParam=invitation}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

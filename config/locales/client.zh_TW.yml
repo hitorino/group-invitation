@@ -1,0 +1,12 @@
+zh_TW:
+  js:
+    group_invitation:
+      invite_user_into_group: "邀請選擇的使用者加入群組"
+      invite_user: "邀請使用者"
+      invitee: "被邀請者"
+      inviter: "邀請者"
+      apply_reason: "邀請理由"
+      created_at: "邀請時間"
+      withdraw_invitation: "撤回邀請"
+      admin:
+        allow_invite_member: "允許邀請使用者"

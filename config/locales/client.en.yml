@@ -1,0 +1,12 @@
+en:
+  js:
+    group_invitation:
+      invite_user_into_group: "Invite the selected user into group"
+      invite_user: "Invite user"
+      invitee: "Invitee"
+      inviter: "Inviter"
+      apply_reason: "Reason to apply"
+      created_at: "Time of invitation"
+      withdraw_invitation: "Withdraw invitation"
+      admin:
+        allow_invite_member: "Allow inviting members"

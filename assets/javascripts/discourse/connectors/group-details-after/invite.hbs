@@ -1,0 +1,7 @@
+{{d-button
+    action=(action "invitePage" model.name)
+    icon="user-plus"
+    class="btn-default"
+    label="group_invitation.invite_user"
+    disabled=(not model.custom_fields.allow_invite_users)
+}}

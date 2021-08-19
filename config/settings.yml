@@ -1,0 +1,18 @@
+plugins:
+  group_invitation_enabled:
+    default: true
+    client: true
+  group_invitation_inviter_min_trust_level:
+    default: 2
+    enum: "TrustLevelSetting"
+  group_invitation_inviters_sum_min_trust_level:
+    default: 4
+  group_invitation_min_inviters:
+    default: 2
+  group_invitation_invitee_min_trust_level:
+    default: 2
+    enum: "TrustLevelSetting"
+  group_invitation_automatic_admit:
+    default: true
+  group_invitation_reason_required:
+    default: false

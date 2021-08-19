@@ -1,0 +1,18 @@
+zh_CN:
+  site_settings:
+    group_invitation_enabled: "启用群组邀请插件"
+    group_invitation_inviter_min_trust_level: "邀请者最小信任级别"
+    group_invitation_invitee_min_trust_level: "被邀请者最小信任级别"
+    group_invitation_inviters_sum_min_trust_level: "邀请者最小总和信任级别"
+    group_invitation_min_inviters: "邀请者最小数量"
+    group_invitation_automatic_admit: "自动通过邀请"
+    group_invitation_reason_required: "Require inviters to fill the reason for recommendation (not implemented)"
+  group_invitation:
+    ineligible_to_invite: "您不能邀请此用户。"
+    group_not_found: "找不到群组。"
+    invitee_not_found: "找不到被邀请者。"
+    already_in_group: "用户已在群组中。"
+    already_sent: "已经发送过邀请了。"
+    invitation_not_found: "未邀请此用户。"
+    user_added_to_group: "用户 %{username} 已经添加到群组 %{group_name}。"
+    reasons_for_recommendation: "邀请理由：\n%{reasons}"

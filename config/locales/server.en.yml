@@ -1,0 +1,18 @@
+en:
+  site_settings:
+    group_invitation_enabled: "Enable Group Invitation plugin"
+    group_invitation_inviter_min_trust_level: "Minimum trust level of inviter"
+    group_invitation_invitee_min_trust_level: "Minimum trust level of invitee"
+    group_invitation_inviters_sum_min_trust_level: "Minimum of the sum of all inviter's trust level"
+    group_invitation_min_inviters: "Minimum inviter numbers"
+    group_invitation_automatic_admit: "Automatically admit invitations"
+    group_invitation_reason_required: "Require inviters to fill the reason for recommendation (not implemented)"
+  group_invitation:
+    ineligible_to_invite: "You are ineligible to invite the user."
+    group_not_found: "Group not found."
+    invitee_not_found: "Invitee not found."
+    already_in_group: "Invitee is already in the group."
+    already_sent: "Invitation is already sent."
+    invitation_not_found: "Invitation not found."
+    user_added_to_group: "User %{username} added into group %{group_name}."
+    reasons_for_recommendation: "Reasons for recommendation:\n%{reasons}"
