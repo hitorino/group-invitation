@@ -5,7 +5,7 @@ export default DiscourseRoute.extend({
   controllerName: "invite",
 
   model(params) {
-    return getInvitations(params.groupName);
+    return getInvitations(params.groupName, "admin");
   },
 
   renderTemplate() {

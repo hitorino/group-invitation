@@ -16,3 +16,4 @@ zh_CN:
     invitation_not_found: "未邀请此用户。"
     user_added_to_group: "用户 %{username} 已经添加到群组 %{group_name}。"
     reasons_for_recommendation: "邀请理由：\n%{reasons}"
+    user_invited_to_group: "用户 %{username} 已被邀请到群组 %{group_name}。"

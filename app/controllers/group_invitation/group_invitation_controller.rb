@@ -3,8 +3,8 @@ module GroupInvitation
     requires_plugin GroupInvitation
 
     before_action :ensure_logged_in
+    before_action :check_group #, only: [:current_invitations, :invite_user, :withdraw_invitation]
     before_action :check_enabled
-    before_action :check_group, only: [:current_invitations, :invite_user, :withdraw_invitation]
     before_action :check_invitee, only: [:invite_user, :withdraw_invitation]
 
     def index
@@ -15,8 +15,18 @@ module GroupInvitation
       render :show
     end
 
+    def show_admin
+      unless can_admin?
+        render "exceptions/not_found"
+      else
+        render :show
+      end
+    end
+
     def current_invitations
-      invitations = ::GroupInvitation::Invitation.where(group: target_group, inviter: current_user).find_all
+      invitations = ::GroupInvitation::Invitation.where(group: target_group)
+      invitations = invitations.where(inviter: current_user) unless params[:filter] == 'admin' && can_admin?
+      invitations = invitations.find_all
 
       invitations = invitations.map do |invitation|
         {
@@ -56,13 +66,19 @@ module GroupInvitation
     end
 
     def withdraw_invitation
-      count = ::GroupInvitation::Invitation.delete_by(group: target_group, inviter: current_user, invitee: invitee)
+      inviter = User.find_by(username: params[:inviter]) if can_admin?
+      inviter ||= current_user
+      count = ::GroupInvitation::Invitation.delete_by(group: target_group, inviter: inviter, invitee: invitee)
       return render_json_error(I18n.t('group_invitation.invitation_not_found'), status: 404) if count == 0
 
       render_json_dump({ ok: true })
     end
 
     private
+
+    def can_admin?
+      target_group.group_users.where(owner: true).where(user_id: current_user.id).exists?
+    end
 
     def check_invitee
       render_json_error(I18n.t('group_invitation.invitee_not_found'), status: 404) if invitee.nil?
@@ -87,17 +103,18 @@ module GroupInvitation
     end
 
     def automatic_admit
-      if SiteSetting.group_invitation_automatic_admit
-        trust_level_sum = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).joins(:inviter).sum("users.trust_level")
-        inviters_count = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).count
-        if trust_level_sum >= SiteSetting.group_invitation_inviters_sum_min_trust_level && inviters_count >= SiteSetting.group_invitation_min_inviters
+      trust_level_sum = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).joins(:inviter).sum("users.trust_level")
+      inviters_count = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).count
+      owner_usernames = target_group.group_users.where(owner: true).find_all.map {|group_user| group_user.user.username }
+
+      reasons = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).joins(:inviter).pluck("users.username", :apply_reason).map{ |pair|
+        pair.join(": ")
+      }.join("\n")
+
+      if trust_level_sum >= SiteSetting.group_invitation_inviters_sum_min_trust_level && inviters_count >= SiteSetting.group_invitation_min_inviters
+        if SiteSetting.group_invitation_automatic_admit
           target_group.add(invitee, notify: true, automatic: true)
 
-          reasons = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).joins(:inviter).pluck("users.username", :apply_reason).map{ |pair|
-            pair.join(": ")
-          }.join("\n")
-
-          owner_usernames = target_group.group_users.where(owner: true).find_all.map {|group_user| group_user.user.username }
           PostCreator.new(invitee,
             title: I18n.t('group_invitation.user_added_to_group', username: invitee.username, group_name: target_group.name),
             raw: I18n.t('group_invitation.reasons_for_recommendation', reasons: reasons),
@@ -105,18 +122,34 @@ module GroupInvitation
             target_usernames: owner_usernames.join(','),
             skip_validations: true
           ).create!
-    
-          ::GroupInvitation::Invitation.delete_by(group: target_group, invitee: invitee)
 
+          ::GroupInvitation::Invitation.delete_by(group: target_group, invitee: invitee)
           true
         else
+          begin
+            GroupRequest.create!(group: target_group, user: invitee, reason: I18n.t('group_invitation.reasons_for_recommendation', reasons: reasons))
+          rescue
+            return false
+          end
+
+          PostCreator.new(invitee,
+            title: I18n.t('group_invitation.user_invited_to_group', username: invitee.username, group_name: target_group.name),
+            raw: I18n.t('group_invitation.reasons_for_recommendation', reasons: reasons),
+            archetype: Archetype.private_message,
+            target_usernames: owner_usernames.join(','),
+            topic_opts: { custom_fields: { requested_group_id: target_group.id } },
+            skip_validations: true
+          ).create!
+
+          ::GroupInvitation::Invitation.delete_by(group: target_group, invitee: invitee)
+
           false
         end
       else
         false
       end
-    #rescue
-    #  raise ActiveRecord::Rollback
+    rescue
+      raise ActiveRecord::Rollback
     end
 
     def enabled_for_target_group?

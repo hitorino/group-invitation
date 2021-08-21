@@ -12,9 +12,13 @@ async function asyncForEach(array, callback) {
     return result;
 }
 
-export default async function (groupName) {
+export default async function (groupName, filter = "") {
     try {
-        let data = await ajax(`/group-invitation/current-invitations/${groupName}`);
+        let url = `/group-invitation/current-invitations/${groupName}`;
+        if (filter === "admin") {
+            url += "?filter=admin";
+        }
+        let data = await ajax(url);
         let invitations = await asyncForEach(data.invitations, async (invitation) => {
             invitation.inviter = await User.findByUsername(invitation.inviter);
             invitation.invitee = await User.findByUsername(invitation.invitee);

@@ -33,7 +33,8 @@ export default Controller.extend({
             ajax(`/group-invitation/withdraw-invitation/${this.model.groupName}`, {
                 type: "POST",
                 data: {
-                    invitee: invitation.invitee.username
+                    invitee: invitation.invitee.username,
+                    inviter: invitation.inviter.username,
                 }
             }).then(() => {
                 getInvitations(this.model.groupName).then((data) => {

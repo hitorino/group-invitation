@@ -16,3 +16,4 @@ zh_TW:
     invitation_not_found: "未邀請此使用者。"
     user_added_to_group: "使用者 %{username} 已經新增到群組 %{group_name}。"
     reasons_for_recommendation: "邀請理由：\n%{reasons}"
+    user_invited_to_group: "使用者 %{username} 已被邀請到群組 %{group_name}。"
