@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_dependency "group_invitation_constraint"
 
 GroupInvitation::Engine.routes.draw do

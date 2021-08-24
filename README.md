@@ -1,6 +1,6 @@
 # GroupInvitation
 
-GroupInvitation is a plugin for ...
+GroupInvitation is a Discourse plugin for users in a group to invite other users joining the group.
 
 ## Installation
 
@@ -9,6 +9,8 @@ how-to from the official Discourse Meta, using `git clone https://github.com/mis
 as the plugin command.
 
 ## Usage
+
+Create a group, set yourself as group owner, and go to https://yourdomain/g/groupname/manage/membership to enable the plugin for that group.
 
 ## Feedback
 

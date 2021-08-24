@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GroupInvitation
   class GroupInvitationController < ::ApplicationController
     requires_plugin GroupInvitation
@@ -10,7 +12,7 @@ module GroupInvitation
     def index
       render :index
     end
-    
+
     def show
       render :show
     end
@@ -24,6 +26,8 @@ module GroupInvitation
     end
 
     def current_invitations
+      return render_json_error(I18n.t('group_invitation.ineligible_to_invite'), status: 403) unless target_group.users.where(id: current_user.id).exists?
+
       invitations = ::GroupInvitation::Invitation.where(group: target_group)
       invitations = invitations.where(inviter: current_user) unless params[:filter] == 'admin' && can_admin?
       invitations = invitations.find_all
@@ -57,7 +61,7 @@ module GroupInvitation
       begin
         the_invitation.save!
         return render_json_dump({ ok: true, automatic_admit: true }) if automatic_admit
-        return render_json_dump({ ok: true })
+        render_json_dump({ ok: true })
       rescue ActiveRecord::RecordNotUnique => _e
         render_json_error(I18n.t('group_invitation.already_sent'), status: 400)
       rescue ActiveRecord::RecordInvalid => _e
@@ -105,9 +109,9 @@ module GroupInvitation
     def automatic_admit
       trust_level_sum = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).joins(:inviter).sum("users.trust_level")
       inviters_count = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).count
-      owner_usernames = target_group.group_users.where(owner: true).find_all.map {|group_user| group_user.user.username }
+      owner_usernames = target_group.group_users.where(owner: true).find_all.map { |group_user| group_user.user.username }
 
-      reasons = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).joins(:inviter).pluck("users.username", :apply_reason).map{ |pair|
+      reasons = ::GroupInvitation::Invitation.where(invitee: invitee, group: target_group).joins(:inviter).pluck("users.username", :apply_reason).map { |pair|
         pair.join(": ")
       }.join("\n")
 
