@@ -1,4 +1,4 @@
-import getInvitations from '../../models/invitations'
+import getInvitations from '../../models/invitations';
 import { popupAjaxError } from "discourse/lib/ajax-error";
 
 export default {
@@ -9,4 +9,4 @@ export default {
             }).catch(popupAjaxError);
         }
     }
-}
+};

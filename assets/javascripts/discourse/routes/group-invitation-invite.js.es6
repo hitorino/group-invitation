@@ -1,5 +1,5 @@
-import DiscourseRoute from 'discourse/routes/discourse'
-import getInvitations from '../models/invitations'
+import DiscourseRoute from 'discourse/routes/discourse';
+import getInvitations from '../models/invitations';
 
 export default DiscourseRoute.extend({
   controllerName: "invite",

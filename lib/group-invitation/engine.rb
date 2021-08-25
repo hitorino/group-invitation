@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GroupInvitation
   class Engine < ::Rails::Engine
     engine_name "GroupInvitation".freeze

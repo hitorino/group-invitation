@@ -2,7 +2,7 @@ import Controller from "@ember/controller";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { get } from "@ember/object";
-import getInvitations from '../models/invitations'
+import getInvitations from '../models/invitations';
 
 export default Controller.extend({
     inviteeUsername: null,
@@ -22,8 +22,8 @@ export default Controller.extend({
                 if (data && data.automatic_admit) {
                     this.transitionToRoute("group.members", this.model.groupName);
                 } else {
-                    getInvitations(this.model.groupName).then((data) => {
-                        this.replaceRoute("group-invitation.invite", data);
+                    getInvitations(this.model.groupName).then((dataGet) => {
+                        this.replaceRoute("group-invitation.invite", dataGet);
                     }).catch(popupAjaxError);
                 }
             }).catch(popupAjaxError);

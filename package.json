@@ -1,0 +1,10 @@
+{
+  "name": "group-invitation",
+  "version": "0.1.0",
+  "repository": "https://github.com/hitorino/group-invitation",
+  "author": "misaka4e21",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "eslint-config-discourse": "^1.1.8"
+  }
+}
