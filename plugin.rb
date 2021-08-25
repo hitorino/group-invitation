@@ -14,7 +14,6 @@ enabled_site_setting :group_invitation_enabled
 
 PLUGIN_NAME ||= 'GroupInvitation'
 
-load File.expand_path('app/models/invitation.rb', __dir__)
 load File.expand_path('lib/group-invitation/engine.rb', __dir__)
 
 after_initialize do
