@@ -7,6 +7,8 @@ zh_TW:
     group_invitation_min_inviters: "邀請者最小數量"
     group_invitation_automatic_admit: "自動通過邀請"
     group_invitation_reason_required: "Require inviters to fill the reason for recommendation (not implemented)"
+    group_invitation_maximum_invitations_per_period: "（group invitation invite time period）天內，使用者最多傳送的邀請數量"
+    group_invitation_invite_time_period: "邀請傳送數量限制週期，以天為單位"
   group_invitation:
     ineligible_to_invite: "您不能邀請此使用者。"
     group_not_found: "找不到群組。"

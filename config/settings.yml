@@ -16,3 +16,7 @@ plugins:
     default: true
   group_invitation_reason_required:
     default: false
+  group_invitation_maximum_invitations_per_period:
+    default: 10
+  group_invitation_invite_time_period:
+    default: 30

@@ -7,6 +7,8 @@ en:
     group_invitation_min_inviters: "Minimum inviter numbers"
     group_invitation_automatic_admit: "Automatically approve invitations"
     group_invitation_reason_required: "Require inviters to fill the reason for recommendation (not implemented)"
+    group_invitation_maximum_invitations_per_period: "Maximum users a group member can invite in the last (group_invitation_invite_time_period) days"
+    group_invitation_invite_time_period: "Rate limit period of invitation sending, in days."
   group_invitation:
     ineligible_to_invite: "You are ineligible to invite the user."
     group_not_found: "Group not found."
@@ -17,3 +19,4 @@ en:
     user_added_to_group: "User %{username} added into group %{group_name}."
     reasons_for_recommendation: "Reasons for recommendation:\n%{reasons}"
     user_invited_to_group: "User %{username} invited into group %{group_name}."
+    too_many_invitations: "You invited too many users into this group for a period."

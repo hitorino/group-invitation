@@ -5,9 +5,10 @@ module GroupInvitation
     requires_plugin GroupInvitation
 
     before_action :ensure_logged_in
-    before_action :check_group #, only: [:current_invitations, :invite_user, :withdraw_invitation]
+    before_action :check_group
     before_action :check_enabled
     before_action :check_invitee, only: [:invite_user, :withdraw_invitation]
+    before_action :check_inviter, only: [:current_invitations, :invite_user, :withdraw_invitation]
 
     def index
       render :index
@@ -26,8 +27,6 @@ module GroupInvitation
     end
 
     def current_invitations
-      return render_json_error(I18n.t('group_invitation.ineligible_to_invite'), status: 403) unless target_group.users.where(id: current_user.id).exists?
-
       invitations = ::GroupInvitation::Invitation.where(group: target_group)
       invitations = invitations.where(inviter: current_user) unless params[:filter] == 'admin' && can_admin?
       invitations = invitations.find_all
@@ -49,6 +48,8 @@ module GroupInvitation
       return render_json_error(I18n.t('group_invitation.already_in_group'), status: 400) if target_group.users.where(id: invitee.id).exists?
 
       inviter = current_user
+
+      return render_json_error(I18n.t('group_invitation.too_many_invitations'), status: 403) if recent_invitation_count + 1 > SiteSetting.group_invitation_maximum_invitations_per_period
 
       apply_reason = params[:apply_reason] if SiteSetting.group_invitation_reason_required
 
@@ -86,6 +87,10 @@ module GroupInvitation
 
     def check_invitee
       render_json_error(I18n.t('group_invitation.invitee_not_found'), status: 404) if invitee.nil?
+    end
+
+    def check_inviter
+      return render_json_error(I18n.t('group_invitation.ineligible_to_invite'), status: 403) unless target_group.users.where(id: current_user.id).exists?
     end
 
     def check_group
@@ -164,6 +169,11 @@ module GroupInvitation
       unless enabled_for_target_group?
         raise Discourse::NotFound
       end
+    end
+
+    def recent_invitation_count
+      start_date_of_period = SiteSetting.group_invitation_invite_time_period.days.ago
+      ::GroupInvitation::Invitation.where(inviter: current_user, group: target_group).where("created_at >= ?", start_date_of_period).count
     end
   end
 end
